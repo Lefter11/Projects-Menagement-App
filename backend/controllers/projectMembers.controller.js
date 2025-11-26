@@ -1,6 +1,6 @@
 const db = require("../db");
 
-// ADD MEMBER
+
 exports.addMember = async (req, res) => {
   try {
     const ownerId = req.user.sub;
@@ -9,7 +9,7 @@ exports.addMember = async (req, res) => {
 
     if (!email) return res.status(400).json({ message: "Email required" });
 
-    // Check if project belongs to owner
+    //kontrollon owner i projektit
     const proj = await db.query(
       "SELECT * FROM projects WHERE id = $1 AND owner_id = $2",
       [projectId, ownerId]
@@ -18,7 +18,7 @@ exports.addMember = async (req, res) => {
     if (!proj.rows.length)
       return res.status(403).json({ message: "Not allowed" });
 
-    // find user
+    // gjen userin 
     const userRes = await db.query(
       "SELECT id, name, email FROM users WHERE email = $1",
       [email]
@@ -27,7 +27,7 @@ exports.addMember = async (req, res) => {
 
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    // insert into members
+    // shton tek memberi
     const result = await db.query(
       `INSERT INTO project_members (project_id, user_id, role)
        VALUES ($1, $2, $3)
@@ -44,13 +44,13 @@ exports.addMember = async (req, res) => {
   }
 };
 
-// LIST MEMBERS
+
 exports.listMembers = async (req, res) => {
   try {
     const userId = req.user.sub;
     const { id } = req.params;
 
-    // access check
+    // aksesin
     const access = await db.query(
       `SELECT p.id
        FROM projects p
@@ -61,7 +61,7 @@ exports.listMembers = async (req, res) => {
     if (!access.rows.length)
       return res.status(403).json({ message: "Not allowed" });
 
-    // owner
+    // owneri
     const owner = await db.query(
       `SELECT u.id, u.name, u.email, 'owner' AS role
        FROM projects p
@@ -70,7 +70,7 @@ exports.listMembers = async (req, res) => {
       [id]
     );
 
-    // members
+    
     const members = await db.query(
       `SELECT u.id, u.name, u.email, pm.role
        FROM project_members pm
@@ -89,13 +89,13 @@ exports.listMembers = async (req, res) => {
   }
 };
 
-// REMOVE MEMBER
+
 exports.removeMember = async (req, res) => {
   try {
     const ownerId = req.user.sub;
     const { id: projectId, userId } = req.params;
 
-    // only owner can remove
+  
     const proj = await db.query(
       "SELECT * FROM projects WHERE id = $1 AND owner_id = $2",
       [projectId, ownerId]

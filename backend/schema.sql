@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS tasks (
   id SERIAL PRIMARY KEY,
   title TEXT NOT NULL,
   description TEXT,
-  status TEXT NOT NULL DEFAULT 'todo',
+  status TEXT NOT NULL DEFAULT '*',
   project_id INTEGER NOT NULL REFERENCES projects(id) ON DELETE CASCADE,
   created_at TIMESTAMPTZ DEFAULT NOW()
 );

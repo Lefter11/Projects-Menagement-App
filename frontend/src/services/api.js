@@ -2,10 +2,9 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || "http://localhost:3000",
-  withCredentials: true, // që cookie refreshToken të dërgohet
+  withCredentials: true, 
 });
 
-// REQUEST interceptor – shton Authorization header nga localStorage
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("accessToken");
   if (token) {
@@ -14,7 +13,6 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// RESPONSE interceptor – në 401 provon refresh token
 let isRefreshing = false;
 let failedQueue = [];
 
@@ -41,7 +39,6 @@ api.interceptors.response.use(
       !originalRequest._retry
     ) {
       if (isRefreshing) {
-        // nëse refresh është në proces, presim
         return new Promise(function (resolve, reject) {
           failedQueue.push({ resolve, reject });
         })

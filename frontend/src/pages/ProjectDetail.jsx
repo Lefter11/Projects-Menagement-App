@@ -54,7 +54,6 @@ const ProjectDetail = () => {
     fetchProject();
     fetchTasks();
     fetchMembers();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const handleAddTask = async (e) => {
@@ -88,7 +87,6 @@ const ProjectDetail = () => {
         }
       );
 
-      // res.data ka { id, role, user }
       const newMember = res.data.user
         ? { ...res.data.user, role: res.data.role || "member" }
         : res.data;
@@ -147,7 +145,7 @@ const ProjectDetail = () => {
         {members.map((m) => (
           <li key={m.id}>
             {m.name} ({m.email}) {m.role && <strong> – {m.role}</strong>}
-            {/* vetëm owner-i mund të heqë, dhe jo veten në këtë listë */}
+            {}
             {project &&
               user &&
               project.owner_id === user.id &&
@@ -163,7 +161,7 @@ const ProjectDetail = () => {
         ))}
       </ul>
 
-      {/* TASKS */}
+      {/* TASKet */}
       <h3>Tasks</h3>
       <form onSubmit={handleAddTask} className="form">
         <input

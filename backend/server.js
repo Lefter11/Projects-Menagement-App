@@ -12,9 +12,9 @@ const userRoutes = require('./routes/users.route');
 
 const app = express();
 
-// Logim i thjeshtë i çdo kërkese
+// Logim i thjesht= i çdo kerkese
 app.use((req, res, next) => {
-  console.log('➡️ REQ:', req.method, req.url);
+  console.log('REq:', req.method, req.url);
   next();
 });
 
@@ -26,7 +26,7 @@ app.use(
   })
 );
 
-// Body parser – mbush req.body
+// mbush req.body
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -44,7 +44,7 @@ app.use('/users', userRoutes);
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-  console.log(`✅ Backend running on port ${PORT}`);
+  console.log(`Backend running on port ${PORT}`);
 });
 
 module.exports = app;

@@ -7,7 +7,6 @@ const {
 } = require("../utils/jwt");
 const { setCookie, clearCookie } = require("../utils/cookie");
 
-// helper për të kthyer user pa password
 const mapUser = (row) => ({
   id: row.id,
   name: row.name,
@@ -15,7 +14,7 @@ const mapUser = (row) => ({
   created_at: row.created_at,
 });
 
-// POST /auth/register
+// per regjistrim
 exports.register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -42,7 +41,7 @@ exports.register = async (req, res) => {
     const accessToken = createAccessToken({ userId: user.id });
     const refreshToken = createRefreshToken({ userId: user.id });
 
-    // refresh token në cookie
+    // refresh token
     setCookie(res, refreshToken);
 
     return res.status(201).json({
@@ -55,7 +54,7 @@ exports.register = async (req, res) => {
   }
 };
 
-// POST /auth/login
+// logini
 exports.login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -91,10 +90,10 @@ exports.login = async (req, res) => {
   }
 };
 
-// GET /auth/me  (mbrohet me authenticate)
+// autentifikimi 
 exports.me = async (req, res) => {
   try {
-    const userId = req.user.sub; // nga verifyAccessToken
+    const userId = req.user.sub; 
     const result = await db.query(
       "SELECT id, name, email, created_at FROM users WHERE id=$1",
       [userId]
@@ -109,7 +108,7 @@ exports.me = async (req, res) => {
   }
 };
 
-// POST /auth/refresh
+//  autentifikimi refresh
 exports.refresh = async (req, res) => {
   try {
     const token = req.cookies[process.env.COOKIE_NAME];
@@ -119,14 +118,14 @@ exports.refresh = async (req, res) => {
 
     let payload;
     try {
-      payload = verifyRefreshToken(token); // merr sub = userId
+      payload = verifyRefreshToken(token); 
     } catch (err) {
       return res.status(401).json({ message: "Invalid refresh token" });
     }
 
     const userId = payload.sub;
 
-    //verifiko që user ekziston
+    //verifiko qe user ekziston
     const result = await db.query("SELECT id FROM users WHERE id=$1", [userId]);
     if (!result.rows.length) {
       return res.status(401).json({ message: "User not found" });
@@ -135,7 +134,7 @@ exports.refresh = async (req, res) => {
     const newAccessToken = createAccessToken({ userId });
     const newRefreshToken = createRefreshToken({ userId });
 
-    // rifresko cookie-n me refresh token të ri
+    // rifresko cokie me refresh token te ri
     setCookie(res, newRefreshToken);
 
     return res.json({
@@ -147,7 +146,7 @@ exports.refresh = async (req, res) => {
   }
 };
 
-// POST /auth/logout
+// logout
 exports.logout = (req, res) => {
   clearCookie(res);
   res.json({ message: "Logged out" });

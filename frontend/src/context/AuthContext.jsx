@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
   );
   const [loading, setLoading] = useState(true);
 
-  // Inicializim: lexon token-in dhe merr /auth/me nëse ekziston
+  // lexon tokendhe merr auth nese ka
   useEffect(() => {
     const init = async () => {
       try {
@@ -21,16 +21,16 @@ export const AuthProvider = ({ children }) => {
           return;
         }
 
-        // ruajmë në state (edhe pse interceptori e lexon nga localStorage)
+        // ruan në state
         setAccessToken(storedToken);
 
-        // Authorization header shtohet automatikisht nga api.js (interceptor)
+
         const res = await api.get("/auth/me");
 
-        // varet si e ke bërë backend-in: { user: {...} } ose direkt user
+
         setUser(res.data.user || res.data);
       } catch (error) {
-        // nëse /auth/me dështon (token i pavlefshëm), pastroje
+
         console.error("Auth init error:", error);
         localStorage.removeItem("accessToken");
         localStorage.removeItem("user");
@@ -44,7 +44,7 @@ export const AuthProvider = ({ children }) => {
     init();
   }, []);
 
-  // thirret nga Login/Register kur marrim user + accessToken nga backend
+
   const login = (userData, token) => {
     setUser(userData);
     setAccessToken(token);
@@ -52,10 +52,10 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("user", JSON.stringify(userData));
   };
 
-  // logout: njofton backend-in + pastron frontend-in
+  // pastron frontend
   const logout = async () => {
     try {
-      await api.post("/auth/logout"); // backend heq refreshToken cookie
+      await api.post("/auth/logout");
     } catch (e) {
       console.warn("Logout error (ignored):", e);
     }
@@ -81,5 +81,5 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-// Hook i thjeshtë për ta përdorur në komponentë
+
 export const useAuth = () => useContext(AuthContext);

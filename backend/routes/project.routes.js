@@ -1,4 +1,3 @@
-// backend/routes/project.routes.js
 const express = require('express');
 const router = express.Router();
 const {
@@ -6,7 +5,6 @@ const {
   listMembers,
   removeMember
 } = require("../controllers/projectMembers.controller");
-// Body parser – vendoset këtu te router (jo te server.js)
 router.use(express.json());
 router.use(express.urlencoded({ extended: true }));
 
@@ -19,12 +17,11 @@ const {
   deleteProject,
 } = require('../controllers/project.controller');
 
-// Middlewares
+
 router.use(authenticate);
 
-// Routes
 router.get('/', getProjects);
-router.post('/', createProject); // pa AJV
+router.post('/', createProject); 
 router.get('/:id', getProject);
 router.put('/:id', updateProject);
 router.delete('/:id', deleteProject);

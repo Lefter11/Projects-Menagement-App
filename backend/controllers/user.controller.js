@@ -1,10 +1,9 @@
 const db = require("../db");
 const bcrypt = require("bcryptjs");
 
-// GET /users/me
 exports.getMe = async (req, res) => {
   try {
-    const userId = req.user.sub; // sub nga JWT :contentReference[oaicite:3]{index=3}
+    const userId = req.user.sub;
 
     const result = await db.query(
       "SELECT id, name, email, created_at FROM users WHERE id = $1",
@@ -21,13 +20,12 @@ exports.getMe = async (req, res) => {
   }
 };
 
-// PUT /users/me
 exports.updateMe = async (req, res) => {
   try {
     const userId = req.user.sub;
     const { name, email, password } = req.body;
 
-    // opsionale: nëse vjen password i ri, e hash-ojmë
+ 
     let hashed = null;
     if (password && password.length >= 6) {
       hashed = await bcrypt.hash(password, 10);

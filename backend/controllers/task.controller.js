@@ -1,7 +1,5 @@
-// backend/controllers/task.controller.js
 const db = require('../db');
 
-// GET /tasks?project_id=...
 exports.getTasks = async (req, res) => {
   try {
     const userId = req.user.sub;
@@ -39,7 +37,6 @@ exports.getTasks = async (req, res) => {
   }
 };
 
-// GET /tasks/:id  – një task i vetëm
 exports.getTask = async (req, res) => {
   try {
     const userId = req.user.sub;
@@ -64,7 +61,6 @@ exports.getTask = async (req, res) => {
   }
 };
 
-// POST /tasks
 exports.createTask = async (req, res) => {
   try {
     const userId = req.user.sub;
@@ -76,7 +72,6 @@ exports.createTask = async (req, res) => {
         .json({ message: 'title and project_id required' });
     }
 
-    // verifiko që projekti i përket user-it
     const proj = await db.query(
       'SELECT id FROM projects WHERE id=$1 AND owner_id=$2',
       [project_id, userId]
@@ -100,7 +95,6 @@ exports.createTask = async (req, res) => {
   }
 };
 
-// PUT /tasks/:id
 exports.updateTask = async (req, res) => {
   try {
     const { id } = req.params;
@@ -127,7 +121,6 @@ exports.updateTask = async (req, res) => {
   }
 };
 
-// DELETE /tasks/:id
 exports.deleteTask = async (req, res) => {
   try {
     const { id } = req.params;

@@ -1,6 +1,6 @@
 const db = require("../db");
 
-// GET /projects
+//meer projects
 const getProjects = async (req, res) => {
   try {
     const userId = req.user.sub;
@@ -21,17 +21,17 @@ const getProjects = async (req, res) => {
   }
 };
 
-// POST /projects
+// poston projects
 const createProject = async (req, res) => {
   try {
     console.log("👉 createProject body:", req.body, "TYPE:", typeof req.body);
 
-    // Sigurohemi që body është objekt
+  
     const body = req.body && typeof req.body === "object" ? req.body : {};
 
     const { name, description } = body;
 
-    // Nëse name mungon, kthe 400, mos plaso
+ 
     if (!name || typeof name !== "string" || name.trim().length < 1) {
       return res.status(400).json({ message: 'Field "name" is required' });
     }
@@ -45,12 +45,12 @@ const createProject = async (req, res) => {
 
     return res.status(201).json(result.rows[0]);
   } catch (e) {
-    console.error("❌ Error në createProject:", e);
+    console.error(" Error në createProject:", e);
     res.status(500).json({ message: "Server error" });
   }
 };
 
-// GET /projects/:id
+// meerr projects id
 const getProject = async (req, res) => {
   try {
     const userId = req.user.sub;
@@ -79,7 +79,7 @@ const getProject = async (req, res) => {
   }
 };
 
-// PUT /projects/:id
+// shton projects nid
 const updateProject = async (req, res) => {
   try {
     const userId = req.user.sub;
@@ -106,7 +106,7 @@ const updateProject = async (req, res) => {
   }
 };
 
-// DELETE /projects/:id
+//fshin projects id
 const deleteProject = async (req, res) => {
   try {
     const userId = req.user.sub;
