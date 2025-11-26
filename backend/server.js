@@ -20,7 +20,7 @@ app.use((req, res, next) => {
 
 app.use(
   cors({
-    origin: process.env.CLIENT_URL || 'https://projects-menagement-frontend.onrender.com/register',
+    origin:'https://projects-menagement-frontend.onrender.com',
    methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true,
   })
